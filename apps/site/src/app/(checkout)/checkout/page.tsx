@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Checkout" };
 export default async function Page() {
   const [paymentOptions, products] = await Promise.all([
     createCheckoutService().getPaymentOptions(),
-    createProductService().listOrderBuilderProducts(),
+    createProductService().getProducts(),
   ]);
   return <CheckoutPage paymentOptions={paymentOptions} products={products} />;
 }

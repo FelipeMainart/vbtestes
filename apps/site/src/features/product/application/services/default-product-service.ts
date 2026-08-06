@@ -4,7 +4,11 @@ import type { ProductService } from "./product-service";
 export class DefaultProductService implements ProductService {
   constructor(private readonly productRepository: ProductRepository) {}
 
-  listOrderBuilderProducts() {
-    return this.productRepository.listActive();
+  getProducts() {
+    return this.productRepository.getProducts();
+  }
+
+  getProductByReference(reference: string) {
+    return this.productRepository.getProductByReference(reference);
   }
 }

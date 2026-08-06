@@ -22,16 +22,16 @@ const variationSchema = z.object({
 
 export const orderBuilderProductsSchema = z.array(
   z.object({
-    colors: z.array(colorSchema).min(1),
-    defaultImageAlt: z.string().min(1),
-    defaultImageUrl: z.url(),
-    description: z.string().min(1),
+    colors: z.array(colorSchema),
+    defaultImageAlt: z.string(),
+    defaultImageUrl: z.union([z.url(), z.literal("")]),
+    description: z.string(),
     id: z.string().min(1),
     name: z.string().min(1),
     priceInCents: z.number().int().nonnegative(),
     reference: z.string().min(1),
-    sizes: z.array(sizeSchema).min(1),
+    sizes: z.array(sizeSchema),
     status: z.literal("active"),
-    variations: z.array(variationSchema).min(1),
+    variations: z.array(variationSchema),
   }),
 );

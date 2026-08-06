@@ -1,5 +1,8 @@
 import type { OrderBuilderProduct } from "../entities/order-builder-product";
 
 export interface ProductRepository {
-  listActive(): Promise<readonly OrderBuilderProduct[]>;
+  getProducts(): Promise<readonly OrderBuilderProduct[]>;
+  getProductByReference(
+    reference: string,
+  ): Promise<OrderBuilderProduct | null>;
 }

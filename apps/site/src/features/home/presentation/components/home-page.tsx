@@ -25,7 +25,7 @@ export async function HomePage({
 }: HomePageProps) {
   const [content, products] = await Promise.all([
     homeService.getContent(),
-    productService.listOrderBuilderProducts(),
+    productService.getProducts(),
   ]);
 
   return (
