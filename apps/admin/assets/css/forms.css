@@ -1,0 +1,82 @@
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field label,
+.form-field span {
+  color: var(--color-muted);
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: var(--color-primary);
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(6, 35, 69, 0.12);
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field--full {
+  grid-column: 1 / -1;
+}
+
+.filters-bar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(180px, 240px);
+  gap: 14px;
+  margin: 24px 0 18px;
+}
+
+.filters-bar--three {
+  grid-template-columns: minmax(220px, 1fr) minmax(180px, 240px) minmax(180px, 240px);
+}
+
+.filters-bar--sales {
+  grid-template-columns: minmax(220px, 1fr) minmax(150px, 180px) minmax(140px, 170px) minmax(140px, 170px) minmax(160px, 190px);
+}
+
+.filters-bar--orders {
+  grid-template-columns: minmax(220px, 1fr) minmax(140px, 170px) minmax(180px, 220px) repeat(2, minmax(130px, 160px));
+}
+
+.filters-bar--finance {
+  grid-template-columns: repeat(2, minmax(130px, 160px)) repeat(4, minmax(150px, 1fr));
+}
+
+.form-message {
+  min-height: 1.25rem;
+  margin: 16px 0 0;
+  color: #991b1b;
+  font-size: 0.86rem;
+}
+
+@media (max-width: 720px) {
+  .form-grid,
+  .filters-bar {
+    grid-template-columns: 1fr;
+  }
+}

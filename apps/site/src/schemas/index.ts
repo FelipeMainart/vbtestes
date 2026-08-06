@@ -1,0 +1,1 @@
+export { paginationSchema } from "./shared";

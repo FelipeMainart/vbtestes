@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veste Bem Admin</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/tables.css" />
+  <link rel="stylesheet" href="assets/css/forms.css" />
+  <link rel="stylesheet" href="assets/css/thermal-receipt.css" />
+  <link rel="stylesheet" href="assets/css/design-system.css" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+</head>
+<body>
+  <div class="app-shell" data-app-shell>
+    <aside class="sidebar" aria-label="Menu principal">
+      <div class="sidebar__brand">
+        <span class="brand-mark" aria-hidden="true" data-company-logo-mark data-company-logo-mark-light></span>
+        <span class="brand-mark brand-mark--icon" aria-hidden="true" data-company-logo-mark-icon></span>
+      </div>
+
+      <nav class="sidebar__nav" id="main-menu">
+        <a class="sidebar__link" href="#/dashboard" data-route-link="dashboard">Dashboard</a>
+        <a class="sidebar__link" href="#/produtos" data-route-link="produtos">Produtos</a>
+        <a class="sidebar__link" href="#/estoque" data-route-link="estoque">Estoque</a>
+        <a class="sidebar__link" href="#/clientes" data-route-link="clientes">Clientes</a>
+        <a class="sidebar__link" href="#/vendas" data-route-link="vendas">Vendas</a>
+        <a class="sidebar__link" href="#/financeiro" data-route-link="financeiro" data-admin-only>Financeiro</a>
+        <a class="sidebar__link" href="#/pedidos" data-route-link="pedidos">Pedidos</a>
+        <a class="sidebar__link" href="#/relatorios" data-route-link="relatorios">Relatórios</a>
+        <a class="sidebar__link" href="#/auditoria" data-route-link="auditoria" data-admin-only>Auditoria</a>
+        <a class="sidebar__link" href="#/configuracoes" data-route-link="configuracoes" data-admin-only>Configurações</a>
+      </nav>
+
+      <div class="sidebar__footer" aria-live="polite">
+        <span class="user-avatar" data-sidebar-user-avatar aria-hidden="true">--</span>
+        <span class="user-summary">
+          <strong data-sidebar-user-name>Carregando...</strong>
+          <span data-sidebar-user-role>Perfil</span>
+          <small class="sidebar__online"><i></i> Online</small>
+        </span>
+        <button class="sidebar__logout" type="button" data-logout-button aria-label="Sair">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10 17l5-5-5-5"></path>
+            <path d="M15 12H3"></path>
+            <path d="M13 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5"></path>
+          </svg>
+          <span>Sair</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="app-content">
+      <header class="topbar">
+        <button class="icon-button topbar__menu-button" type="button" data-sidebar-toggle aria-label="Abrir menu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+
+        <div class="topbar__title">
+          <h1 id="page-title">Dashboard</h1>
+          <p id="page-subtitle">Resumo da operação de hoje.</p>
+          <img class="topbar__brand-logo" data-topbar-brand-logo alt="Veste Bem" hidden />
+        </div>
+
+        <div class="topbar-search" data-global-search>
+          <span aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="m21 21-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z"></path>
+            </svg>
+          </span>
+          <input type="search" placeholder="Buscar produto, cliente ou pedido..." autocomplete="off" aria-label="Busca global" data-global-search-input />
+          <div class="global-search-panel" data-global-search-panel hidden></div>
+        </div>
+
+        <a class="button button--primary topbar__sale-button" href="#/vendas/nova">+ Nova Venda</a>
+
+        <div class="topbar-actions">
+          <button class="notification-button" type="button" aria-label="Notificações">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+              <path d="M10 21h4"></path>
+            </svg>
+            <span hidden>0</span>
+          </button>
+
+          <div class="user-menu" data-user-menu>
+            <button class="user-menu__trigger" type="button" aria-label="Abrir menu do usuário" aria-expanded="false" data-user-menu-trigger>
+              <span class="user-avatar" id="user-avatar" aria-hidden="true">--</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m8 10 4 4 4-4"></path>
+              </svg>
+            </button>
+            <div class="user-menu__panel" data-user-menu-panel hidden>
+              <div class="user-summary" aria-live="polite">
+                <div>
+                  <strong id="user-name">Carregando...</strong>
+                  <span id="user-role">Perfil</span>
+                </div>
+              </div>
+              <button class="button button--secondary" id="logout-button" type="button" data-logout-button>Sair</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-area" id="app-main" tabindex="-1">
+        <section class="module-panel">
+          <p class="eyebrow">Carregando</p>
+          <h2>Preparando painel</h2>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="sidebar-backdrop" data-sidebar-backdrop hidden></div>
+
+  <script src="assets/vendor/html2pdf/html2pdf.bundle.min.js"></script>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
+

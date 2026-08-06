@@ -1,0 +1,427 @@
+/*
+ * Veste Bem E-commerce Design System
+ * Fonte visual canônica do storefront.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Cores */
+  --ds-color-navy-900: #0b1f3a;
+  --ds-color-navy-800: #102a4c;
+  --ds-color-gold-500: #c8a45d;
+  --ds-color-gold-200: #e8d9b5;
+  --ds-color-white: #ffffff;
+  --ds-color-off-white: #faf8f4;
+  --ds-color-gray-50: #f8f9fa;
+  --ds-color-gray-100: #f3f4f6;
+  --ds-color-gray-200: #e5e7eb;
+  --ds-color-gray-300: #d1d5db;
+  --ds-color-gray-500: #6b7280;
+  --ds-color-gray-700: #374151;
+  --ds-color-ink: #111827;
+  --ds-color-success: #247153;
+  --ds-color-warning: #9a6700;
+  --ds-color-danger: #a63434;
+  --ds-color-info: #285c8e;
+  --ds-color-backdrop: rgb(11 31 58 / 55%);
+
+  --ds-color-background: var(--ds-color-white);
+  --ds-color-surface: var(--ds-color-white);
+  --ds-color-surface-soft: var(--ds-color-off-white);
+  --ds-color-text: var(--ds-color-ink);
+  --ds-color-text-muted: var(--ds-color-gray-500);
+  --ds-color-heading: var(--ds-color-navy-900);
+  --ds-color-primary: var(--ds-color-navy-900);
+  --ds-color-primary-hover: var(--ds-color-navy-800);
+  --ds-color-accent: var(--ds-color-gold-500);
+  --ds-color-accent-soft: var(--ds-color-gold-200);
+  --ds-color-border: var(--ds-color-gray-200);
+  --ds-color-border-strong: var(--ds-color-gray-300);
+  --ds-color-focus: var(--ds-color-gold-500);
+  --ds-color-disabled-background: var(--ds-color-gray-100);
+  --ds-color-disabled-text: var(--ds-color-gray-500);
+
+  /* Tipografia */
+  --ds-font-family-sans: "Inter", "Avenir Next", "Segoe UI", sans-serif;
+  --ds-font-family-display: "Cormorant Garamond", Georgia, serif;
+  --ds-font-size-xs: 0.75rem;
+  --ds-font-size-sm: 0.875rem;
+  --ds-font-size-md: 1rem;
+  --ds-font-size-lg: 1.125rem;
+  --ds-font-size-xl: 1.25rem;
+  --ds-font-size-2xl: 1.5rem;
+  --ds-font-size-3xl: clamp(1.8rem, 4vw, 2.75rem);
+  --ds-font-size-display: clamp(2.6rem, 7vw, 5.75rem);
+  --ds-font-weight-regular: 400;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-semibold: 600;
+  --ds-font-weight-bold: 700;
+  --ds-line-height-tight: 1.05;
+  --ds-line-height-heading: 1.18;
+  --ds-line-height-body: 1.65;
+  --ds-letter-spacing-tight: -0.035em;
+  --ds-letter-spacing-wide: 0.14em;
+
+  /* Espaçamentos */
+  --ds-space-1: 0.25rem;
+  --ds-space-2: 0.5rem;
+  --ds-space-3: 0.75rem;
+  --ds-space-4: 1rem;
+  --ds-space-5: 1.25rem;
+  --ds-space-6: 1.5rem;
+  --ds-space-8: 2rem;
+  --ds-space-10: 2.5rem;
+  --ds-space-12: 3rem;
+  --ds-space-16: 4rem;
+  --ds-space-20: 5rem;
+  --ds-space-24: 6rem;
+  --ds-space-32: 8rem;
+
+  /* Containers e responsividade */
+  --ds-container-max: 76rem;
+  --ds-container-wide: 90rem;
+  --ds-container-gutter: clamp(1.25rem, 4vw, 3rem);
+  --ds-breakpoint-tablet: 48rem;
+  --ds-breakpoint-desktop: 64rem;
+  --ds-breakpoint-wide: 90rem;
+
+  /* Bordas e raios */
+  --ds-border-width: 1px;
+  --ds-border: var(--ds-border-width) solid var(--ds-color-border);
+  --ds-border-strong: var(--ds-border-width) solid var(--ds-color-border-strong);
+  --ds-radius-sm: 0.5rem;
+  --ds-radius-control: 0.625rem;
+  --ds-radius-card: 0.75rem;
+  --ds-radius-lg: 1.25rem;
+  --ds-radius-pill: 999px;
+
+  /* Sombras */
+  --ds-shadow-xs: 0 1px 2px rgb(11 31 58 / 5%);
+  --ds-shadow-sm: 0 8px 24px rgb(11 31 58 / 7%);
+  --ds-shadow-md: 0 20px 55px rgb(11 31 58 / 10%);
+  --ds-shadow-focus: 0 0 0 3px rgb(200 164 93 / 35%);
+
+  /* Estados e transições */
+  --ds-opacity-disabled: 0.58;
+  --ds-transition-fast: 160ms ease;
+  --ds-transition-base: 240ms ease;
+  --ds-transition-slow: 420ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Z-index */
+  --ds-z-base: 0;
+  --ds-z-sticky: 20;
+  --ds-z-dropdown: 40;
+  --ds-z-overlay: 60;
+  --ds-z-modal: 70;
+  --ds-z-toast: 80;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--ds-color-background);
+}
+
+body {
+  background: var(--ds-color-background);
+  color: var(--ds-color-text);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-md);
+  line-height: var(--ds-line-height-body);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--ds-color-accent-soft);
+  color: var(--ds-color-navy-900);
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-block-start: 0;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--ds-color-heading);
+  line-height: var(--ds-line-height-heading);
+}
+
+:where(a, button, input, select, summary):focus-visible {
+  outline: 2px solid var(--ds-color-focus);
+  outline-offset: 3px;
+  box-shadow: var(--ds-shadow-focus);
+}
+
+.ds-container {
+  width: min(100%, var(--ds-container-wide));
+  margin-inline: auto;
+  padding-inline: var(--ds-container-gutter);
+}
+
+.ds-section-header {
+  max-width: 43rem;
+  margin-block-end: var(--ds-space-10);
+}
+
+.ds-eyebrow {
+  color: var(--ds-color-accent);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-bold);
+  letter-spacing: var(--ds-letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.ds-section-title {
+  margin-block-end: var(--ds-space-4);
+  font-family: var(--ds-font-family-display);
+  font-size: var(--ds-font-size-3xl);
+  font-weight: var(--ds-font-weight-medium);
+  letter-spacing: var(--ds-letter-spacing-tight);
+}
+
+.ds-section-description {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-lg);
+}
+
+.ds-button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-3) var(--ds-space-6);
+  border: var(--ds-border-width) solid transparent;
+  border-radius: var(--ds-radius-control);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--ds-transition-fast),
+    border-color var(--ds-transition-fast),
+    color var(--ds-transition-fast),
+    transform var(--ds-transition-fast);
+}
+
+.ds-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.ds-button--primary {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-white);
+}
+
+.ds-button--primary:hover:not(:disabled) {
+  background: var(--ds-color-primary-hover);
+}
+
+.ds-button--secondary {
+  border-color: var(--ds-color-border-strong);
+  background: var(--ds-color-white);
+  color: var(--ds-color-primary);
+}
+
+.ds-button--secondary:hover:not(:disabled) {
+  border-color: var(--ds-color-accent);
+  background: var(--ds-color-off-white);
+}
+
+.ds-button--danger {
+  background: var(--ds-color-danger);
+  color: var(--ds-color-white);
+}
+
+.ds-button:disabled,
+.ds-button[aria-disabled="true"] {
+  border-color: var(--ds-color-border);
+  background: var(--ds-color-disabled-background);
+  color: var(--ds-color-disabled-text);
+  cursor: not-allowed;
+  opacity: var(--ds-opacity-disabled);
+  transform: none;
+}
+
+.ds-icon-button {
+  width: 2.75rem;
+  min-height: 2.75rem;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: var(--ds-border);
+  border-radius: var(--ds-radius-control);
+  background: var(--ds-color-white);
+  color: var(--ds-color-primary);
+  cursor: pointer;
+  transition:
+    border-color var(--ds-transition-fast),
+    background-color var(--ds-transition-fast);
+}
+
+.ds-icon-button:hover:not(:disabled) {
+  border-color: var(--ds-color-accent);
+  background: var(--ds-color-off-white);
+}
+
+.ds-icon-button:disabled {
+  color: var(--ds-color-disabled-text);
+  cursor: not-allowed;
+  opacity: var(--ds-opacity-disabled);
+}
+
+.ds-card {
+  border: var(--ds-border);
+  border-radius: var(--ds-radius-card);
+  background: var(--ds-color-surface);
+  box-shadow: var(--ds-shadow-xs);
+}
+
+.ds-card-title {
+  font-size: var(--ds-font-size-xl);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.ds-input,
+.ds-native-select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border: var(--ds-border-strong);
+  border-radius: var(--ds-radius-control);
+  background: var(--ds-color-white);
+  color: var(--ds-color-text);
+}
+
+.ds-input:disabled,
+.ds-native-select:disabled {
+  background: var(--ds-color-disabled-background);
+  color: var(--ds-color-disabled-text);
+  cursor: not-allowed;
+}
+
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--ds-space-1) var(--ds-space-3);
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-color-off-white);
+  color: var(--ds-color-navy-900);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.ds-skeleton {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-gray-100);
+}
+
+.ds-drawer-backdrop {
+  position: fixed;
+  z-index: var(--ds-z-overlay);
+  inset: 0;
+  display: flex;
+  background: var(--ds-color-backdrop);
+}
+
+.ds-drawer {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  background: var(--ds-color-white);
+  box-shadow: var(--ds-shadow-md);
+}
+
+.ds-drawer > header {
+  position: sticky;
+  z-index: var(--ds-z-base);
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border-bottom: var(--ds-border);
+  background: var(--ds-color-white);
+}
+
+.ds-drawer > header h2 {
+  margin: 0;
+  font-family: var(--ds-font-family-display);
+  font-size: var(--ds-font-size-2xl);
+  font-weight: var(--ds-font-weight-medium);
+}
+
+.ds-drawer--bottom {
+  width: 100%;
+  max-height: min(88svh, 48rem);
+  align-self: flex-end;
+  border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+  animation: drawer-in var(--ds-transition-slow) both;
+}
+
+.ds-drawer--bottom::before {
+  width: 2.75rem;
+  height: 0.25rem;
+  flex: 0 0 auto;
+  align-self: center;
+  margin-top: var(--ds-space-2);
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-color-gray-300);
+  content: "";
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateY(2rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.ds-drawer--right {
+  width: min(100%, 30rem);
+  height: 100%;
+  margin-left: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
