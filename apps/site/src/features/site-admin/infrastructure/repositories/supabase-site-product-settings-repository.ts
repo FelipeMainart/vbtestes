@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminServerClient } from "@/lib/supabase/admin";
 
 import type { SiteProductSettings } from "../../domain/entities/site-product-settings";
 import type { SiteProductSettingsRepository } from "../../domain/repositories/site-product-settings-repository";
@@ -26,11 +26,9 @@ function mapSettings(row: SiteProductSettingsRow): SiteProductSettings {
   };
 }
 
-export class SupabaseSiteProductSettingsRepository
-  implements SiteProductSettingsRepository
-{
+export class SupabaseSiteProductSettingsRepository implements SiteProductSettingsRepository {
   async getByProductId(productId: string) {
-    const supabase = createSupabaseServerClient();
+    const supabase = createSupabaseAdminServerClient();
     const { data, error } = await supabase
       .from(tableName)
       .select(columns)
@@ -38,14 +36,10 @@ export class SupabaseSiteProductSettingsRepository
       .maybeSingle();
 
     if (error) {
-      throw new Error(
-        `Unable to load site product settings: ${error.message}`,
-      );
+      throw new Error(`Unable to load site product settings: ${error.message}`);
     }
 
-    return data
-      ? mapSettings(siteProductSettingsRowSchema.parse(data))
-      : null;
+    return data ? mapSettings(siteProductSettingsRowSchema.parse(data)) : null;
   }
 
   publish(productId: string) {
@@ -81,14 +75,34 @@ export class SupabaseSiteProductSettingsRepository
     return this.upsert(productId, { is_featured: input.isFeatured });
   }
 
+  async updateSettings(
+    productId: string,
+    input: Parameters<SiteProductSettingsRepository["updateSettings"]>[1],
+  ) {
+    const currentSettings = await this.getByProductId(productId);
+
+    return this.upsert(productId, {
+      is_featured: input.isFeatured,
+      is_published: input.isPublished,
+      published_at: input.isPublished
+        ? (currentSettings?.publishedAt ?? new Date().toISOString())
+        : null,
+      seo_description: input.seoDescription,
+      seo_title: input.seoTitle,
+    });
+  }
+
   private async upsert(
     productId: string,
     values: Record<string, boolean | string | null>,
   ) {
-    const supabase = createSupabaseServerClient();
+    const supabase = createSupabaseAdminServerClient();
     const { data, error } = await supabase
       .from(tableName)
-      .upsert({ product_id: productId, ...values }, { onConflict: "product_id" })
+      .upsert(
+        { product_id: productId, ...values },
+        { onConflict: "product_id" },
+      )
       .select(columns)
       .single();
 

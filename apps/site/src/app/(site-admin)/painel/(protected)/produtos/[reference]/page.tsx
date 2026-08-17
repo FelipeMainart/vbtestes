@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { SiteAdminProductDetails } from "@/features/site-admin";
+import { requireSiteAdminUser } from "@/features/site-admin/presentation/actions/site-admin-auth.action";
 import { createProductService } from "@/lib/composition/product";
 import {
   createSiteProductColorRepository,
@@ -18,6 +19,7 @@ type ProductDetailsPageProps = Readonly<{
 }>;
 
 export default async function Page({ params }: ProductDetailsPageProps) {
+  await requireSiteAdminUser();
   const { reference } = await params;
   const product = await createProductService().getProductByReference(reference);
 
@@ -33,10 +35,10 @@ export default async function Page({ params }: ProductDetailsPageProps) {
     settingsRepository.getByProductId(product.id),
   ]);
   const mediaEntries = await Promise.all(
-    colors.map(async (color) => [
-      color.id,
-      await mediaRepository.getByColorId(color.id),
-    ] as const),
+    colors.map(
+      async (color) =>
+        [color.id, await mediaRepository.getByColorId(color.id)] as const,
+    ),
   );
 
   return (

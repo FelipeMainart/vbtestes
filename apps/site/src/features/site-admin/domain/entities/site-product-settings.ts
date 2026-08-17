@@ -17,3 +17,10 @@ export type SiteProductSeoInput = Readonly<{
 export type SiteProductDisplaySettingsInput = Readonly<{
   isFeatured: boolean;
 }>;
+
+export type UpdateSiteProductSettingsInput = Readonly<{
+  isFeatured: boolean;
+  isPublished: boolean;
+  seoDescription: string | null;
+  seoTitle: string | null;
+}>;

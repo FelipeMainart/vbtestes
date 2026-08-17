@@ -2,6 +2,7 @@ import type {
   SiteProductDisplaySettingsInput,
   SiteProductSeoInput,
   SiteProductSettings,
+  UpdateSiteProductSettingsInput,
 } from "../entities/site-product-settings";
 
 export interface SiteProductSettingsRepository {
@@ -15,5 +16,9 @@ export interface SiteProductSettingsRepository {
   updateDisplaySettings(
     productId: string,
     input: SiteProductDisplaySettingsInput,
+  ): Promise<SiteProductSettings>;
+  updateSettings(
+    productId: string,
+    input: UpdateSiteProductSettingsInput,
   ): Promise<SiteProductSettings>;
 }

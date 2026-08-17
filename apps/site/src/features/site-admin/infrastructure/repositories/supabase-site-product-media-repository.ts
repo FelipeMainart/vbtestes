@@ -2,7 +2,7 @@ import "server-only";
 
 import { z } from "zod";
 
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminServerClient } from "@/lib/supabase/admin";
 
 import type {
   CreateSiteProductMediaInput,
@@ -18,7 +18,10 @@ const tableName = "site_product_media";
 const columns =
   "id,product_color_id,storage_path,alt_text,is_primary,sort_order,mime_type,width,height,created_at,updated_at";
 
-function mapMedia(row: SiteProductMediaRow, imageUrl: string): SiteProductMedia {
+function mapMedia(
+  row: SiteProductMediaRow,
+  imageUrl: string,
+): SiteProductMedia {
   return {
     altText: row.alt_text,
     createdAt: row.created_at,
@@ -35,11 +38,9 @@ function mapMedia(row: SiteProductMediaRow, imageUrl: string): SiteProductMedia 
   };
 }
 
-export class SupabaseSiteProductMediaRepository
-  implements SiteProductMediaRepository
-{
+export class SupabaseSiteProductMediaRepository implements SiteProductMediaRepository {
   async getByColorId(colorId: string) {
-    const supabase = createSupabaseServerClient();
+    const supabase = createSupabaseAdminServerClient();
     const { data, error } = await supabase
       .from(tableName)
       .select(columns)
@@ -58,7 +59,7 @@ export class SupabaseSiteProductMediaRepository
   }
 
   async getPrimaryImage(colorId: string) {
-    const supabase = createSupabaseServerClient();
+    const supabase = createSupabaseAdminServerClient();
     const { data, error } = await supabase
       .from(tableName)
       .select(columns)
@@ -73,8 +74,22 @@ export class SupabaseSiteProductMediaRepository
     return data ? this.mapMedia(siteProductMediaRowSchema.parse(data)) : null;
   }
 
+  async uploadFile(storagePath: string, file: File) {
+    const supabase = createSupabaseAdminServerClient();
+    const { error } = await supabase.storage
+      .from("product-images")
+      .upload(storagePath, file, {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (error) {
+      throw new Error(`Unable to upload product media: ${error.message}`);
+    }
+  }
+
   async create(input: CreateSiteProductMediaInput) {
-    const supabase = createSupabaseServerClient();
+    const supabase = createSupabaseAdminServerClient();
     const { data, error } = await supabase
       .from(tableName)
       .insert({
@@ -98,8 +113,34 @@ export class SupabaseSiteProductMediaRepository
   }
 
   async remove(mediaId: string) {
-    const supabase = createSupabaseServerClient();
-    const { error } = await supabase.from(tableName).delete().eq("id", mediaId);
+    const supabase = createSupabaseAdminServerClient();
+    const { data: target, error: targetError } = await supabase
+      .from(tableName)
+      .select("id,storage_path")
+      .eq("id", mediaId)
+      .single();
+
+    if (targetError) {
+      throw new Error(`Unable to find product media: ${targetError.message}`);
+    }
+
+    const parsedTarget = z
+      .object({ id: z.string().min(1), storage_path: z.string().min(1) })
+      .parse(target);
+    const { error: storageError } = await supabase.storage
+      .from("product-images")
+      .remove([parsedTarget.storage_path]);
+
+    if (storageError) {
+      throw new Error(
+        `Unable to remove product media file: ${storageError.message}`,
+      );
+    }
+
+    const { error } = await supabase
+      .from(tableName)
+      .delete()
+      .eq("id", parsedTarget.id);
 
     if (error) {
       throw new Error(`Unable to remove product media: ${error.message}`);
@@ -113,7 +154,7 @@ export class SupabaseSiteProductMediaRepository
   }
 
   async setPrimary(mediaId: string) {
-    const supabase = createSupabaseServerClient();
+    const supabase = createSupabaseAdminServerClient();
     const { data: target, error: targetError } = await supabase
       .from(tableName)
       .select("id,product_color_id")
@@ -148,7 +189,7 @@ export class SupabaseSiteProductMediaRepository
     mediaId: string,
     values: Record<string, boolean | number>,
   ) {
-    const supabase = createSupabaseServerClient();
+    const supabase = createSupabaseAdminServerClient();
     const { data, error } = await supabase
       .from(tableName)
       .update(values)
@@ -164,7 +205,7 @@ export class SupabaseSiteProductMediaRepository
   }
 
   private mapMedia(row: SiteProductMediaRow) {
-    const supabase = createSupabaseServerClient();
+    const supabase = createSupabaseAdminServerClient();
     const { data } = supabase.storage
       .from("product-images")
       .getPublicUrl(row.storage_path);

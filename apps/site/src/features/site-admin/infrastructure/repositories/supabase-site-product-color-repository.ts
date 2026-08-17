@@ -2,17 +2,15 @@ import "server-only";
 
 import { z } from "zod";
 
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminServerClient } from "@/lib/supabase/admin";
 
 import type { SiteProductColor } from "../../domain/entities/site-product-color";
 import type { SiteProductColorRepository } from "../../domain/repositories/site-product-color-repository";
 import { siteProductColorRowSchema } from "../schemas/site-product-color.schema";
 
-export class SupabaseSiteProductColorRepository
-  implements SiteProductColorRepository
-{
+export class SupabaseSiteProductColorRepository implements SiteProductColorRepository {
   async getByProductId(productId: string) {
-    const supabase = createSupabaseServerClient();
+    const supabase = createSupabaseAdminServerClient();
     const { data, error } = await supabase
       .from("product_colors")
       .select("id,product_id,color_name,image_url,active")

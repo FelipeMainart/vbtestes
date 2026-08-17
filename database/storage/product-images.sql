@@ -1,0 +1,9 @@
+--------------------------------------------------
+-- Nome: product-images
+-- Descrição: Documentação futura do armazenamento da galeria complementar de imagens por cor utilizada pelo Site.
+-- Dependências: public.product_colors; public.site_product_media
+-- Data: 2026-08-06
+-- Autor: Equipe Veste Bem
+-- Status: Planejado
+-- Observações: O ERP permanece responsável pela imagem principal da cor. O Site armazenará apenas imagens complementares, vinculadas por product_color_id, incluindo sua ordem e a definição da foto principal do e-commerce. Nenhum bucket, policy ou instrução SQL foi definido ou executado neste arquivo.
+--------------------------------------------------

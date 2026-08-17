@@ -1,0 +1,46 @@
+-- # Histórico
+--
+-- ## Correção V1
+--
+-- Problema:
+--
+-- O Site retornava:
+--
+-- permission denied for table products
+--
+-- ao consultar product_colors.
+--
+-- Causa:
+--
+-- A policy product_colors_seller_select_active utilizava:
+--
+-- EXISTS (
+--     SELECT 1
+--     FROM products
+--     ...
+-- )
+--
+-- Essa dependência fazia o PostgreSQL exigir permissão na tabela products mesmo
+-- quando a consulta era realizada apenas em product_colors.
+--
+-- Como os vendedores do Admin utilizam vw_products_seller e vw_stock_seller,
+-- essa validação era redundante.
+--
+-- Solução adotada:
+--
+-- ALTER POLICY product_colors_seller_select_active
+-- ON public.product_colors
+-- USING (
+--     is_seller()
+--     AND active = true
+-- );
+--
+-- Justificativa:
+--
+-- - remove a dependência da tabela products;
+-- - mantém o comportamento esperado para sellers;
+-- - corrige o acesso do Site;
+-- - evita erro de permission denied.
+--
+-- Este arquivo documenta uma correção já realizada. Seu conteúdo está comentado
+-- e não constitui um script para execução automática no banco de dados.

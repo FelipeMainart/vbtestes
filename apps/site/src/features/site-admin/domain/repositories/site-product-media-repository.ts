@@ -6,6 +6,7 @@ import type {
 export interface SiteProductMediaRepository {
   getByColorId(colorId: string): Promise<readonly SiteProductMedia[]>;
   getPrimaryImage(colorId: string): Promise<SiteProductMedia | null>;
+  uploadFile(storagePath: string, file: File): Promise<void>;
   create(input: CreateSiteProductMediaInput): Promise<SiteProductMedia>;
   remove(mediaId: string): Promise<void>;
   updateSortOrder(

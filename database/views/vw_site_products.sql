@@ -1,0 +1,9 @@
+--------------------------------------------------
+-- Nome: vw_site_products
+-- Descrição: Documentação futura da view pública de produtos do Site.
+-- Dependências: public.products
+-- Data: 2026-08-06
+-- Autor: Equipe Veste Bem
+-- Status: Planejado
+-- Observações: Nenhum SQL foi definido ou executado neste arquivo.
+--------------------------------------------------
