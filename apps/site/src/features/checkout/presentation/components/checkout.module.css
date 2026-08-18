@@ -391,6 +391,51 @@
   line-height: var(--ds-line-height-body);
 }
 
+.whatsappHandoff {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--ds-space-4);
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border: 1px solid rgb(37 211 102 / 30%);
+  border-radius: var(--ds-radius-card);
+  background:
+    radial-gradient(circle at 0% 50%, rgb(37 211 102 / 12%), transparent 42%),
+    var(--ds-color-surface-soft);
+}
+
+.whatsappHandoffIcon {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border-radius: var(--ds-radius-pill);
+  background: #25d366;
+  color: var(--ds-color-white);
+}
+
+.whatsappHandoff > div {
+  display: grid;
+  gap: var(--ds-space-1);
+  min-width: 0;
+}
+
+.whatsappHandoff strong,
+.whatsappHandoff p {
+  margin: 0;
+}
+
+.whatsappHandoff strong {
+  color: var(--ds-color-heading);
+  font-size: var(--ds-font-size-sm);
+}
+
+.whatsappHandoff p {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs);
+  line-height: var(--ds-line-height-body);
+}
+
 .actions {
   display: grid;
   grid-template-columns: auto auto;

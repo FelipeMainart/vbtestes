@@ -4,10 +4,9 @@ import { z } from "zod";
 
 import {
   cartLineInputSchema,
-  checkoutConfirmationSchema,
+  checkoutReviewSchema,
 } from "../../application/schemas/checkout.schema";
 import { createCheckoutService } from "@/lib/composition/checkout";
-import { createOrderService } from "@/lib/composition/orders";
 
 const postalCodeSchema = z.string().min(1).max(12);
 
@@ -30,18 +29,11 @@ export async function calculateShippingAction(input: unknown) {
   return createCheckoutService().calculateShipping(parsed.data);
 }
 
-export async function confirmOrderAction(input: unknown) {
-  const parsed = checkoutConfirmationSchema.safeParse(input);
+export async function reviewCheckoutAction(input: unknown) {
+  const parsed = checkoutReviewSchema.safeParse(input);
   if (!parsed.success)
     return { ok: false as const, reason: "invalid-checkout" as const };
 
   const service = createCheckoutService();
-  const reviewed = await service.review(parsed.data);
-  if (!reviewed.ok) return reviewed;
-
-  const order = await createOrderService().create(
-    reviewed.review,
-    parsed.data.idempotencyKey,
-  );
-  return { ok: true as const, order, orderId: order.id };
+  return service.review(parsed.data);
 }

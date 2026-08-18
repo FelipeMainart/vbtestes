@@ -7,23 +7,21 @@ import {
   ChevronDown,
   Circle,
   CreditCard,
-  LockKeyhole,
   QrCode,
   Truck,
 } from "lucide-react";
-import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { Button } from "@/components/ui/button";
-import { ROUTES, orderSuccessRoute } from "@/constants/routes";
+import { ROUTES } from "@/constants/routes";
 import type { OrderBuilderProduct } from "@/features/product";
 import { cartService } from "@/lib/composition/cart.client";
-import { localOrderRepository } from "@/lib/composition/orders.client";
 import type { PaymentOption } from "@/services/interfaces/payment-service";
 import type { ShippingOption } from "@/services/interfaces/shipping-service";
 
@@ -34,12 +32,13 @@ import {
 import type { CheckoutSnapshot } from "../../domain/entities/checkout";
 import {
   calculateShippingAction,
-  confirmOrderAction,
   lookupAddressAction,
   prepareCheckoutAction,
+  reviewCheckoutAction,
 } from "../actions/checkout.actions";
 import { CheckoutSummary } from "./checkout-summary";
 import { Field } from "./field";
+import { buildWhatsappOrderUrl } from "../utils/build-whatsapp-order-url";
 import { formatCheckoutPrice } from "../utils/format-checkout-price";
 import styles from "./checkout.module.css";
 
@@ -48,7 +47,7 @@ const formSchema = z.object({
   customer: customerSchema,
 });
 type FormValues = z.infer<typeof formSchema>;
-const visualSteps = ["Dados", "Entrega", "Pagamento", "Revisão"] as const;
+const visualSteps = ["Dados", "Entrega", "Pagamento", "WhatsApp"] as const;
 
 type Props = Readonly<{
   paymentOptions: readonly PaymentOption[];
@@ -70,7 +69,6 @@ export function CheckoutPage({ paymentOptions, products }: Props) {
   const [fullNameError, setFullNameError] = useState<string | undefined>();
   const [status, setStatus] = useState("Validando seu pedido…");
   const [isPending, setIsPending] = useState(false);
-  const idempotencyKey = useRef<string | null>(null);
   const form = useForm<FormValues>({
     defaultValues: {
       address: {
@@ -123,9 +121,6 @@ export function CheckoutPage({ paymentOptions, products }: Props) {
     (item) => item.id === shippingId,
   );
   const selectedPayment = paymentOptions.find((item) => item.id === paymentId);
-  const visiblePaymentOptions = paymentOptions.filter(
-    (option) => option.id !== "boleto",
-  );
   const visualStep: 0 | 1 | 2 | 3 =
     step === 0 ? 0 : step === 1 ? 1 : step === 3 ? 2 : 3;
 
@@ -183,34 +178,25 @@ export function CheckoutPage({ paymentOptions, products }: Props) {
     setStatus("Opções de entrega disponíveis. Escolha a melhor para você.");
     setIsPending(false);
   }
-  async function confirmOrder() {
+  async function sendOrderToWhatsApp() {
     if (!snapshot || !shippingId || !paymentId) return;
     setIsPending(true);
-    idempotencyKey.current ??= crypto.randomUUID();
-    const result = await confirmOrderAction({
+    const result = await reviewCheckoutAction({
       ...form.getValues(),
-      idempotencyKey: idempotencyKey.current,
       lines: snapshot.lines,
       paymentId,
       shippingId,
     });
     if (!result.ok) {
       setStatus(
-        "Não foi possível confirmar o pedido. Revise os dados e tente novamente.",
+        "Não foi possível preparar a mensagem. Revise os dados e tente novamente.",
       );
       setIsPending(false);
       return;
     }
-    const wasPersisted = localOrderRepository.save(result.order);
-    if (!wasPersisted) {
-      setStatus(
-        "O pedido foi confirmado, mas não foi possível preparar a página de sucesso neste navegador. Libere o armazenamento local e tente novamente.",
-      );
-      setIsPending(false);
-      return;
-    }
+    const whatsappUrl = buildWhatsappOrderUrl(result.review);
     await cartService.clear();
-    router.push(orderSuccessRoute(result.orderId) as Route);
+    window.location.assign(whatsappUrl);
   }
 
   if (!snapshot)
@@ -235,8 +221,8 @@ export function CheckoutPage({ paymentOptions, products }: Props) {
             />
           </Link>
           <span className={styles.checkoutSecure}>
-            <LockKeyhole aria-hidden="true" size={17} strokeWidth={2} />
-            Checkout seguro
+            <WhatsAppIcon aria-hidden="true" height={17} width={17} />
+            Pedido no WhatsApp
           </span>
           <Link className={styles.checkoutBack} href={`${ROUTES.home}#modelos`}>
             <ArrowLeft aria-hidden="true" size={16} /> Voltar ao pedido
@@ -440,7 +426,8 @@ export function CheckoutPage({ paymentOptions, products }: Props) {
                   <div className={styles.groupHeading}>
                     <h2>Escolha da entrega</h2>
                     <p>
-                      Compare prazo e valor para escolher com tranquilidade.
+                      Escolha uma referência. A equipe confirma prazo e valor
+                      no WhatsApp.
                     </p>
                   </div>
                   {shippingOptions.length === 0 ? (
@@ -520,7 +507,7 @@ export function CheckoutPage({ paymentOptions, products }: Props) {
                   <legend className={styles.srOnly}>
                     Escolha a forma de pagamento
                   </legend>
-                  {visiblePaymentOptions.map((option) => {
+                  {paymentOptions.map((option) => {
                     const PaymentIcon =
                       option.id === "pix" ? QrCode : CreditCard;
                     return (
@@ -540,19 +527,15 @@ export function CheckoutPage({ paymentOptions, products }: Props) {
                         </span>
                         <span>
                           <strong>{option.label}</strong>
-                          <small>
-                            {option.id === "pix"
-                              ? "Pagamento instantâneo. Receba as instruções após confirmar."
-                              : "Visa, Mastercard e Elo · pagamento seguro."}
-                          </small>
+                          <small>{option.description}</small>
                         </span>
                       </label>
                     );
                   })}
                 </fieldset>
                 <p className={styles.paymentNotice}>
-                  Ambiente de demonstração. Nenhuma cobrança será realizada
-                  nesta versão.
+                  Nenhuma cobrança acontece no site. Você envia esta
+                  preferência e confirma as condições diretamente com a loja.
                 </p>
                 <div className={styles.actions}>
                   <Button onClick={() => setStep(1)} variant="secondary">
@@ -571,8 +554,26 @@ export function CheckoutPage({ paymentOptions, products }: Props) {
               >
                 <div>
                   <p>Finalização</p>
-                  <h1 id="review-title">Revise e confirme</h1>
-                  <span>Confira suas informações antes de finalizar.</span>
+                  <h1 id="review-title">Envie seu pedido pelo WhatsApp</h1>
+                  <span>
+                    Confira tudo. A próxima etapa acontece em uma conversa com a
+                    equipe Veste Bem.
+                  </span>
+                </div>
+                <div className={styles.whatsappHandoff}>
+                  <span
+                    className={styles.whatsappHandoffIcon}
+                    aria-hidden="true"
+                  >
+                    <WhatsAppIcon height={24} width={24} />
+                  </span>
+                  <div>
+                    <strong>Pedido pronto para a loja</strong>
+                    <p>
+                      O WhatsApp será aberto com os itens, endereço, entrega,
+                      pagamento e totais já preenchidos.
+                    </p>
+                  </div>
                 </div>
                 <div className={styles.reviewCards}>
                   <article>
@@ -635,7 +636,7 @@ export function CheckoutPage({ paymentOptions, products }: Props) {
                     </div>
                     <p>{snapshot.summary.totalPieces} peças no pedido</p>
                     <p>
-                      Total:{" "}
+                      Total estimado:{" "}
                       {formatCheckoutPrice(
                         snapshot.summary.subtotalInCents +
                           selectedShipping.priceInCents,
@@ -649,9 +650,10 @@ export function CheckoutPage({ paymentOptions, products }: Props) {
                   </Button>
                   <Button
                     disabled={isPending}
-                    onClick={() => void confirmOrder()}
+                    onClick={() => void sendOrderToWhatsApp()}
                   >
-                    {isPending ? "Confirmando…" : "Finalizar Pedido"}
+                    <WhatsAppIcon aria-hidden="true" height={18} width={18} />
+                    {isPending ? "Preparando mensagem…" : "Enviar pelo WhatsApp"}
                   </Button>
                 </div>
               </section>

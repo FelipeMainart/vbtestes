@@ -50,10 +50,9 @@ export const cartLineInputSchema = z.object({
   variationId: z.string().min(1),
 });
 
-export const checkoutConfirmationSchema = z.object({
+export const checkoutReviewSchema = z.object({
   address: addressSchema,
   customer: customerSchema,
-  idempotencyKey: z.uuid(),
   lines: z.array(cartLineInputSchema).min(1),
   paymentId: z.enum(["pix", "card", "boleto"]),
   shippingId: z.enum(["pac", "sedex", "premium"]),

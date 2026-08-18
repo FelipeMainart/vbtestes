@@ -14,7 +14,7 @@ type Props = Readonly<{
   snapshot: CheckoutSnapshot;
 }>;
 
-const milestones = ["Dados", "Entrega", "Pagamento", "Revisão"] as const;
+const milestones = ["Dados", "Entrega", "Pagamento", "WhatsApp"] as const;
 
 export function CheckoutSummary({ currentStep, shipping, snapshot }: Props) {
   const total =
@@ -130,25 +130,25 @@ export function CheckoutSummary({ currentStep, shipping, snapshot }: Props) {
         </div>
         <p>
           <ShieldCheck aria-hidden="true" size={19} />
-          Você está economizando tempo e cuidando do seu negócio.
+          Tudo organizado para a equipe continuar com você no WhatsApp.
         </p>
       </section>
 
       <footer className={styles.trustSignals} aria-label="Garantias da compra">
         <span>
           <ShieldCheck aria-hidden="true" size={25} />
-          <strong>Compra segura</strong>
-          <small>Tecnologia e criptografia para proteger seus dados</small>
+          <strong>Pedido organizado</strong>
+          <small>Itens e dados prontos para enviar à loja</small>
         </span>
         <span>
           <Truck aria-hidden="true" size={27} />
-          <strong>Entrega para todo o Brasil</strong>
-          <small>Com as melhores transportadoras</small>
+          <strong>Entrega combinada</strong>
+          <small>Prazo e valor confirmados no WhatsApp</small>
         </span>
         <span>
           <WhatsAppIcon aria-hidden="true" height={26} width={26} />
-          <strong>Suporte via WhatsApp</strong>
-          <small>Atendimento rápido e humanizado</small>
+          <strong>Atendimento humano</strong>
+          <small>Finalize a compra direto com a equipe</small>
         </span>
       </footer>
     </div>

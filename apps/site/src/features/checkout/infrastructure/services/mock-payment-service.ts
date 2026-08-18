@@ -2,17 +2,17 @@ import type { PaymentService } from "@/services/interfaces/payment-service";
 
 const options = [
   {
-    description: "Interface demonstrativa, sem geração de cobrança.",
+    description: "A equipe envia as instruções e confirma no WhatsApp.",
     id: "pix",
     label: "PIX",
   },
   {
-    description: "Nenhum dado de cartão será solicitado nesta versão.",
+    description: "A loja combina os detalhes com você no WhatsApp.",
     id: "card",
     label: "Cartão",
   },
   {
-    description: "Interface demonstrativa, sem emissão de boleto.",
+    description: "A disponibilidade e as condições são confirmadas pela equipe.",
     id: "boleto",
     label: "Boleto",
   },
