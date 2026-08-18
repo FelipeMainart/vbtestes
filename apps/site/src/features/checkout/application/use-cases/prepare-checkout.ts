@@ -7,7 +7,7 @@ export async function prepareCheckout(
   lines: readonly OrderLine[],
   productRepository: ProductRepository,
 ) {
-  const products = await productRepository.listActive();
+  const products = await productRepository.getProducts();
   const restored = restoreOrder(lines, products);
   const summary = summarizeOrder(restored.lines);
 

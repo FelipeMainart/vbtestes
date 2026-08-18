@@ -1,6 +1,6 @@
 import { HomePage } from "@/features/home";
 import { createHomeService } from "@/lib/composition/home";
-import { createProductService } from "@/lib/composition/product";
+import { createStorefrontProductService } from "@/lib/composition/product";
 
 export default async function StorePage({
   searchParams,
@@ -14,7 +14,7 @@ export default async function StorePage({
           ? "Seu pedido ainda não atingiu o mínimo de 6 peças."
           : undefined
       }
-      productService={createProductService()}
+      productService={createStorefrontProductService()}
     />
   );
 }
